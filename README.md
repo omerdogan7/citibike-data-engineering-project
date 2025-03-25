@@ -97,7 +97,8 @@ The `docker-compose.yml` file contains the following services:
    ```
 
 6. **Start Services**
-**Airflow Fernet Key**
+
+   **Airflow Fernet Key**
    - Before `docker-compose up --build`, replace the Fernet key in `docker-compose.yml` with "your fernet key" to avoid exposing sensitive information
    ```bash
    docker-compose up --build
