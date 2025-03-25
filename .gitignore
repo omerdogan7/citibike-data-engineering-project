@@ -18,9 +18,9 @@ __pycache__/
 *.service-account.json
 
 # Data Management
-data/raw/**
+data/raw/*
 !data/raw/.gitkeep
-data/processed/**
+data/processed/*
 !data/processed/.gitkeep
 
 # Airflow
