@@ -1,5 +1,26 @@
 # Citi Bike Data Engineering Pipeline
 
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Architecture](#architecture)
+- [Data Pipeline Flow](#data-pipeline-flow)
+  - [Data Ingestion](#data-ingestion)
+  - [Batch Processing](#batch-processing-apache-spark)
+  - [Data Loading & Storage](#data-loading--storage)
+  - [Data Transformation](#data-transformation-dbt)
+- [Technologies Used](#technologies-used)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
+- [Development](#development)
+  - [Adding New DAGs](#adding-new-dags)
+  - [DBT Models](#dbt-models)
+- [Monitoring](#monitoring)
+- [Tableau Dashboards](#tableau-dashboards)
+  - [CitiBike Analysis Dashboard](#1-citibike-analysis-dashboard)
+  - [Station Heatmap](#2-station-heatmap)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Project Overview
 This project implements a robust batch processing data engineering pipeline for processing and analyzing Citi Bike trip data. The pipeline downloads historical trip data from Citibike's public dataset, processes it using Apache Spark for batch operations, and loads it into Google BigQuery for analysis. It uses modern data stack technologies to provide comprehensive insights into bike-sharing patterns in New York City.
 
