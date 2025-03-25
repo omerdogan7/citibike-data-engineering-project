@@ -1,0 +1,187 @@
+x-airflow-common: &airflow-common
+  image: airflow-image
+  environment:
+    - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+    - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://airflow:airflow@postgres/airflow
+    - AIRFLOW__CELERY__BROKER_URL=redis://:@redis:6379/0
+    - AIRFLOW__CORE__FERNET_KEY=your_fernet_key
+    - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=true
+    - AIRFLOW__CORE__LOAD_EXAMPLES=false
+    - AIRFLOW__API__AUTH_BACKENDS=airflow.api.auth.backend.basic_auth
+    - AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK=true
+    - GOOGLE_APPLICATION_CREDENTIALS=/opt/airflow/gcp-credentials/key.json
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./data:/opt/airflow/data
+    - ./scripts:/opt/airflow/scripts
+    - ./dbt:/opt/airflow/dbt 
+    - ./gcp-credentials:/opt/airflow/gcp-credentials
+    - /var/run/docker.sock:/var/run/docker.sock
+  networks:
+    - data-pipeline
+  restart: always
+  env_file:
+    - .env  
+
+x-spark-common: &spark-common
+  image: spark-image
+  environment:
+    - SPARK_RPC_AUTHENTICATION_ENABLED=no
+    - SPARK_RPC_ENCRYPTION_ENABLED=no
+    - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+    - SPARK_SSL_ENABLED=no
+    - SPARK_NETWORK_MAX_FRAME_SIZE_BYTES=10485760
+  volumes:
+    - ./data:/opt/spark/data
+    - ./spark:/opt/spark
+    - ./gcp-credentials:/opt/spark/gcp-credentials
+  networks:
+    - data-pipeline
+  env_file:
+    - .env 
+
+services:
+  # Database for Airflow metadata
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 10
+    restart: always
+    networks:
+      - data-pipeline
+    env_file:
+      - .env  
+
+  # Message broker for Celery
+  redis:
+    image: redis:latest
+    expose:
+      - 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 30s
+      retries: 50
+    restart: always
+    networks:
+      - data-pipeline
+
+  # Initialize Airflow database and create admin user
+  airflow-init:
+    <<: *airflow-common
+    depends_on:
+      - postgres
+      - redis
+    entrypoint: >
+      bash -c "
+        airflow db init &&
+        airflow connections create-default-connections &&
+        airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com
+      "
+    restart: "no"  # Only run once
+
+  # Airflow web server
+  airflow-webserver:
+    <<: *airflow-common
+    depends_on:
+      - postgres
+      - redis
+      - airflow-init
+    command: webserver
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # Airflow scheduler
+  airflow-scheduler:
+    <<: *airflow-common
+    depends_on:
+      - postgres
+      - redis
+      - airflow-webserver
+      - airflow-init
+    command: scheduler
+
+  # Airflow Celery worker
+  airflow-worker:
+    <<: *airflow-common
+    depends_on:
+      - airflow-scheduler
+      - airflow-init
+    command: celery worker
+    
+  # Spark master node
+  spark-master:
+    <<: *spark-common
+    ports:
+      - "8090:8080"  # Web UI
+      - "7077:7077"  # Spark master port 
+    environment:
+      - SPARK_MODE=master
+      - AIRFLOW__CELERY__WORKER_TIMEOUT=7200 
+      - SPARK_CONF_spark_network_maxFrameSizeBytes=100000000
+
+  # Spark worker node
+  spark-worker:
+    <<: *spark-common
+    user: '0'
+    depends_on:
+      - spark-master
+    ports:
+    - "8081:8081"
+    - "4040:4040"
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=10G
+      - SPARK_WORKER_CORES=8
+      - SPARK_CONF_spark_network_maxFrameSizeBytes=100000000
+      - SPARK_CONF_spark_default_parallelism=4
+      - SPARK_CONF_spark_sql_shuffle_partitions=8
+      - SPARK_CONF_spark_memory_fraction=0.7
+      - SPARK_CONF_spark_memory_storageFraction=0.3
+      - SPARK_EXECUTOR_MEMORY=3G
+      - SPARK_DRIVER_MEMORY=2G
+      - SPARK_EXECUTOR_CORES=2
+      - SPARK_CONF_spark_ui_enabled=true
+      - SPARK_CONF_spark_ui_port=4040
+
+  # DBT for Transformations
+  dbt:
+    container_name: dbt
+    build:
+      context: ./docker/dbt
+      dockerfile: Dockerfile
+    volumes:
+      - ./dbt:/usr/app
+      - ./dbt/profiles.yml:/root/.dbt/profiles.yml  # Mount profiles.yml
+      - ./gcp-credentials:/root/.google/credentials
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/root/.google/credentials/key.json
+    working_dir: /usr/app
+    networks:
+      - data-pipeline
+    env_file:
+      - .env
+    
+volumes:
+  postgres-db-volume:
+
+networks:
+  data-pipeline:
+    driver: bridge

@@ -1,0 +1,49 @@
+version: 2
+
+sources:
+  - name: citibike
+    database: data-engineering-78756  # Your GCP project ID
+    schema: citibike_data           # Your BigQuery dataset
+    tables:
+      - name: citibike_combined     # Table name in the dataset
+        description: "Contains combined Citibike ride data."
+        columns:
+          - name: ride_id
+            description: "Unique identifier for each ride."
+            data_type: STRING
+          - name: rideable_type
+            description: "Type of the rideable (bike or scooter)."
+            data_type: STRING
+          - name: started_at
+            description: "Timestamp of when the ride started."
+            data_type: TIMESTAMP
+          - name: ended_at
+            description: "Timestamp of when the ride ended."
+            data_type: TIMESTAMP
+          - name: start_station_name
+            description: "Name of the starting station."
+            data_type: STRING
+          - name: start_station_id
+            description: "ID of the starting station."
+            data_type: STRING
+          - name: end_station_name
+            description: "Name of the ending station."
+            data_type: STRING
+          - name: end_station_id
+            description: "ID of the ending station."
+            data_type: STRING
+          - name: start_lat
+            description: "Latitude of the starting station."
+            data_type: FLOAT64
+          - name: start_lng
+            description: "Longitude of the starting station."
+            data_type: FLOAT64
+          - name: end_lat
+            description: "Latitude of the ending station."
+            data_type: FLOAT64
+          - name: end_lng
+            description: "Longitude of the ending station."
+            data_type: FLOAT64
+          - name: member_casual
+            description: "Type of user, either 'member' or 'casual'."
+            data_type: STRING

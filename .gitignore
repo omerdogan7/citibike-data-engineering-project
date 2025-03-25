@@ -1,0 +1,74 @@
+# Existing Credentials and Secrets
+*.json
+.env
+*.env
+**/credentials/
+**/*.key
+**/*.json
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.class
+
+# Project-Specific Additions
+**/gcp-credentials/
+**/service-account-key.json
+*.service-account.json
+
+# Data Management
+data/raw/**
+!data/raw/.gitkeep
+data/processed/**
+!data/processed/.gitkeep
+
+# Airflow
+airflow/logs/**
+airflow/dag_processor_manager/
+airflow/scheduler/
+airflow/**/*.pid
+
+# Spark
+spark/checkpoints/**
+spark/work/**
+spark/data/**
+
+# dbt
+dbt/target/**
+dbt/logs/**
+dbt/compiled/**
+dbt/run/**
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# Docker
+!docker/**/Dockerfile
+!docker/**/docker-compose.yml
+docker/**/build/
+docker/**/volumes/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Testing and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+tests/reports/
+
+# Miscellaneous Temp Files
+*.tmp
+*.bak
+*.backup
+*.log

@@ -1,0 +1,11 @@
+citibike_project:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('GCP_PROJECT_ID') }}"  # Reads from env variable
+      dataset: citibike_data
+      location: EU  # Change if needed (e.g., US)
+      threads: 4
+      keyfile: /root/.google/credentials/key.json

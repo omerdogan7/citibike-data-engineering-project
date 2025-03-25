@@ -1,0 +1,28 @@
+name: 'citibike_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'citibike_project'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  citibike_project:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
+      +partition_by:
+        field: started_at
+        data_type: timestamp
+        granularity: day
