@@ -30,14 +30,17 @@ airflow/scheduler/
 airflow/**/*.pid
 
 # Ignore all contents of these directories
-checkpoints/**
-work/**
-data/**
+spark/checkpoints/**
+spark/work/**
+spark/data/**
 
 # But keep directory structure
-!checkpoints/.gitkeep
-!work/.gitkeep
-!data/.gitkeep
+!spark/checkpoints/.gitkeep
+!spark/work/.gitkeep
+!spark/data/.gitkeep
+!spark/jobs/.gitkeep
+!spark/lib/.gitkeep
+
 
 
 # dbt

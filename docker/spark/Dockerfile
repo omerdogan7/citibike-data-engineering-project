@@ -13,10 +13,6 @@ RUN apt-get update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Google Cloud SDK
-RUN curl -sSL https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | bash -s -- --install-dir=/opt/google-cloud-sdk --disable-prompts
-ENV PATH $PATH:/opt/google-cloud-sdk/bin
-
 # Install Python dependencies for Spark
 RUN pip3 install --no-cache-dir \
     pyspark==3.4.1 \
