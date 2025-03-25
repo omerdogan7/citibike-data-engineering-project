@@ -33,6 +33,8 @@ airflow/**/*.pid
 spark/checkpoints/**
 spark/work/**
 spark/data/**
+!spark/jobs
+!spark/lib
 
 # dbt
 dbt/target/**
