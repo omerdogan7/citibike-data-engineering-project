@@ -1,0 +1,3 @@
+# Ignore all JSON files (service account keys)
+*.json
+!.gitignore
