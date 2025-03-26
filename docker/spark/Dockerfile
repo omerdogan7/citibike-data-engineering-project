@@ -22,10 +22,7 @@ RUN pip3 install --no-cache-dir \
     numpy>=1.22.0 \
     pyarrow>=7.0.0 \
     delta-spark>=2.0.0
-
-# Copy necessary files for GCP authentication
-ENV GOOGLE_APPLICATION_CREDENTIALS=/opt/spark/gcp-credentials/key.json
-
+    
 # Set correct permissions for mounted volumes
 RUN mkdir -p /opt/spark/work /opt/spark/data /opt/spark/gcp-credentials && \
     chmod -R 777 /opt/spark/work /opt/spark/data /opt/spark/gcp-credentials

@@ -37,7 +37,6 @@ x-spark-common: &spark-common
   volumes:
     - ./data:/opt/spark/data
     - ./spark:/opt/spark
-    - ./gcp-credentials:/opt/spark/gcp-credentials
   networks:
     - data-pipeline
   env_file:
