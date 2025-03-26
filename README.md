@@ -16,8 +16,8 @@
   - [DBT Models](#dbt-models)
 - [Monitoring](#monitoring)
 - [Tableau Dashboards](#tableau-dashboards)
-  - [CitiBike Analysis Dashboard](#1-citibike-analysis-dashboard)
-  - [Station Heatmap](#2-station-heatmap)
+  - [1. CitiBike Analysis Dashboard](#1-citibike-analysis-dashboard)
+  - [2. Station Heatmap](#2-station-heatmap)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -149,7 +149,7 @@ The dbt models are located in the `dbt/models` directory. These transformations 
 ## Tableau Dashboards
 The project includes two dashboards for analyzing Citi Bike data:
 
-1. CitiBike Analysis Dashboard
+## 1. CitiBike Analysis Dashboard
 ![CitiBike Analysis Dashboard](/docs/citibike_analysis.png)
 
 [View on Tableau Public](https://public.tableau.com/views/citibike-data-engineering-project/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
@@ -177,7 +177,7 @@ This breakdown highlights that peak usage occurs during commute hours (morning a
 ### 5. Total Trip Volume
 The dashboard shows a total of 79.51M trips in the 2023-2024 period, demonstrating the significant scale and impact of the bike-sharing service in urban mobility. This substantial number reflects the growing importance of alternative transportation methods in urban environments.
 
-2. Station Heatmap
+## 2. Station Heatmap
 ![Station Heatmap](/docs/heatmap.png)
 
 [View on Tableau Public](https://public.tableau.com/shared/33P5JBYTM?:display_count=n&:origin=viz_share_link)
