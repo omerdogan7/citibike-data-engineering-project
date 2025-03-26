@@ -150,7 +150,10 @@ The dbt models are located in the `dbt/models` directory. These transformations 
 The project includes two dashboards for analyzing Citi Bike data:
 
 ### 1. CitiBike Analysis Dashboard
-[![CitiBike Analysis Dashboard](/docs/citibike_analysis.png)](/docs/citibike_analysis.png)
+![CitiBike Analysis Dashboard](/docs/citibike_analysis.png)
+
+[View on Tableau Public](https://public.tableau.com/views/citibike-data-engineering-project/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
+
 ## Trip Data Insights 2023-2024
 
 ### 1. Membership Dominance
@@ -175,8 +178,11 @@ This breakdown highlights that peak usage occurs during commute hours (morning a
 The dashboard shows a total of 79.51M trips in the 2023-2024 period, demonstrating the significant scale and impact of the bike-sharing service in urban mobility. This substantial number reflects the growing importance of alternative transportation methods in urban environments.
 
 ### 2. Station Heatmap
-[![Station Heatmap](/docs/heatmap.png)](/docs/heatmap.png)
-# Urban Mobility Snapshot
+![Station Heatmap](/docs/heatmap.png)
+
+[View on Tableau Public](https://public.tableau.com/shared/33P5JBYTM?:display_count=n&:origin=viz_share_link)
+
+### Urban Mobility Snapshot
 
 Bike-sharing emerges as a crucial urban transportation solution, concentrating in high-density economic corridors. The heatmap reveals how these shared bikes seamlessly integrate into daily commuting, providing flexible and sustainable mobility across the most active urban zones.
 
