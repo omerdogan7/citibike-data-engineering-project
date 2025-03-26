@@ -4,10 +4,10 @@
 - [Project Overview](#project-overview)
 - [Architecture](#architecture)
 - [Data Pipeline Flow](#data-pipeline-flow)
-  - [Data Ingestion](#data-ingestion)
-  - [Batch Processing](#batch-processing-apache-spark)
-  - [Data Loading & Storage](#data-loading--storage)
-  - [Data Transformation](#data-transformation-dbt)
+  - [1. Data Ingestion](#1-data-ingestion)
+  - [2. Batch Processing (Apache Spark)](#2-batch-processing-apache-spark)
+  - [3. Data Loading & Storage](#3-data-loading--storage)
+  - [4. Data Transformation (dbt)](#4-data-transformation-dbt)
 - [Technologies Used](#technologies-used)
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
@@ -38,24 +38,24 @@ The pipeline consists of the following components:
 - **Infrastructure as Code**: Terraform for GCP resource management
 
 ## Data Pipeline Flow
-1. **Data Ingestion**
+## 1. **Data Ingestion**
    - Downloads Citibike trip data from S3 bucket (s3.amazonaws.com/tripdata)
    - Handles both yearly archives and monthly data files
    - Stores raw data in ZIP format
 
-2. **Batch Processing (Apache Spark)**
+## 2. **Batch Processing (Apache Spark)**
    - Extracts and validates data from ZIP files
    - Applies schema validation and type conversions
    - Handles data quality checks and missing values
    - Converts to Parquet format for optimization
 
-3. **Data Loading & Storage**
+## 3. **Data Loading & Storage**
    - Uploads processed Parquet files to Google Cloud Storage
    - Creates partitioned tables in BigQuery (by date)
    - Implements efficient clustering by station IDs
    - Merges new data using ACID transactions
 
-4. **Data Transformation (dbt)**
+## 4. **Data Transformation (dbt)**
    - Runs after batch processing completion
    - Applies business logic and transformations
    - Performs data quality tests
@@ -149,7 +149,7 @@ The dbt models are located in the `dbt/models` directory. These transformations 
 ## Tableau Dashboards
 The project includes two dashboards for analyzing Citi Bike data:
 
-### 1. CitiBike Analysis Dashboard
+1. CitiBike Analysis Dashboard
 ![CitiBike Analysis Dashboard](/docs/citibike_analysis.png)
 
 [View on Tableau Public](https://public.tableau.com/views/citibike-data-engineering-project/Dashboard1?:language=en-US&publish=yes&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)
@@ -177,7 +177,7 @@ This breakdown highlights that peak usage occurs during commute hours (morning a
 ### 5. Total Trip Volume
 The dashboard shows a total of 79.51M trips in the 2023-2024 period, demonstrating the significant scale and impact of the bike-sharing service in urban mobility. This substantial number reflects the growing importance of alternative transportation methods in urban environments.
 
-### 2. Station Heatmap
+2. Station Heatmap
 ![Station Heatmap](/docs/heatmap.png)
 
 [View on Tableau Public](https://public.tableau.com/shared/33P5JBYTM?:display_count=n&:origin=viz_share_link)
